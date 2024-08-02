@@ -6,6 +6,7 @@ from model.itemModel import Item
 
 from service.userService import userService
 from service.todoService import todoService
+from service.itemService import itemService
 
 app = FastAPI()
 
@@ -72,20 +73,31 @@ def delete_todo(todo_id: int):
     return service.delete_todo(todo_id)
 
 # Routes for items
-@app.post("/create-item")
-def create_item():
-    return {"message": "Create item"}
+@app.post("/create-item/{item_id}/{user_id}/{new_item}/{given_cost}")
+def create_item(item_id: int, user_id: int, new_item: str, given_cost: int):
+    service = itemService()
+    new_item = Item(id=item_id, user_id=user_id, item=new_item, cost=given_cost)
+    return service.create_item(new_item)
 
-@app.get("/get-item")
-def get_item():
-    return {"message": "Get item"}
+@app.get("/get-item/{item_id}")
+def get_item(item_id: int):
+    service = itemService()
+    return service.get_item(item_id)
 
-@app.put("/update-item")
-def update_item():
-    return {"message": "Update item"}
+@app.get("/get-items/{user_id}")
+def get_items(user_id: int):
+    service = itemService()
+    return service.get_items(user_id)
 
-@app.delete("/delete-item")
-def delete_item():
-    return {"message": "Delete item"}
+@app.put("/update-item/{item_id}/{user_id}/{new_item}/{given_cost}")
+def update_item(item_id: int, user_id: int, new_item: str, given_cost: int):
+    service = itemService()
+    new_item = Item(id=item_id, user_id=user_id, item=new_item, cost=given_cost)
+    return service.update_item(new_item)
+
+@app.delete("/delete-item/{item_id}")
+def delete_item(item_id: int):
+    service = itemService()
+    return service.delete_item(item_id)
 
 
