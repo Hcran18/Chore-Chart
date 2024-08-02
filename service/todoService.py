@@ -4,8 +4,6 @@ from DAO.todoDAO import todoDAO
 from fastapi import HTTPException, status
 
 class todoService:
-    myDatabase = Database()
-
     def todoServiceTemplate(self, operation):
         database = Database()
 

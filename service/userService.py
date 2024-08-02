@@ -4,8 +4,6 @@ from DAO.userDAO import UserDao
 from fastapi import HTTPException, status
 
 class userService:
-    myDatabase = Database()
-
     def userServiceTemplate(self, operation):
         database = Database()
 

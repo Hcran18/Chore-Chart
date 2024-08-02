@@ -4,8 +4,6 @@ from DAO.itemDAO import ItemDAO
 from fastapi import HTTPException, status
 
 class itemService:
-    myDatabase = Database()
-
     def itemServiceTemplate(self, operation):
         database = Database()
 
