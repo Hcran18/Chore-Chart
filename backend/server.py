@@ -99,5 +99,3 @@ def update_item(item_id: int, user_id: int, new_item: str, given_cost: int):
 def delete_item(item_id: int):
     service = itemService()
     return service.delete_item(item_id)
-
-
