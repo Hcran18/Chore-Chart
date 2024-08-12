@@ -9,6 +9,7 @@ class Database():
 
     def open_connection():
         return mysql.connector.connect(
+            # Replace the correct values when building the image
             host=os.getenv("DATABASE_HOST"),
             port=int(os.getenv("DATABASE_PORT")),
             user=os.getenv("DATABASE_USER"),
@@ -18,8 +19,10 @@ class Database():
 
     def get_connection(self):
         if Database.__connection is None:
+            print ("Opening connection")
             Database.__connection = Database.open_connection()
 
+        print ("Returning connection")
         return Database.__connection
 
     def close_connection(self):

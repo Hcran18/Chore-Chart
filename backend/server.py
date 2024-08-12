@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from model.userModel import User
 from model.todoModel import Todo
@@ -10,11 +11,19 @@ from service.itemService import itemService
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # To run the server, use the command: uvicorn server:app --reload
 
 # @app.get("/")
 # def read_root():
-#     return {"message": "Hello World"}
+# return {"message": "Hello World"}Invoke-WebRequest
 
 # Routes for user
 @app.post("/register/{user_id}/{user_name}")
