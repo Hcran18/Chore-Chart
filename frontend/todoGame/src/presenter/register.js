@@ -26,4 +26,17 @@ export class Register {
       throw error;
     }
   }
+
+  async login(username) {
+    const url = "http://localhost:8000/login/" + username;
+    const request = new Request();
+
+    try {
+      const data = await request.post(url, "Failed to log in");
+      return data;
+    } 
+    catch (error) {
+      throw error;
+    }
+  }
 }

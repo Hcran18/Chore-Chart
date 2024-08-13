@@ -38,11 +38,33 @@ function Login() {
         }
     }
 
+    async function handleLogin(e) {
+        e.preventDefault();
+
+        const cache = Cache.getInstance();
+        const service = new Register();
+
+        try {
+            const { message, user } = await service.login(username);
+            const givenUser = new User(user[0], user[1], user[2]);
+            cache.setUser(givenUser);
+
+            setMessage(message);
+
+            if (message === "User logged in successfully") {
+                localStorage.setItem("cache", JSON.stringify(cache));
+                window.location.href = "/home";
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <>
             <div>
                 <h1>Todo Game</h1>
-                <h3>Sign up</h3>
+                <h3>Sign up or Login</h3>
                 <form>
                     <label>
                         Username:
@@ -56,9 +78,15 @@ function Login() {
                     <button type="submit" onClick={handleSignUp}>
                         Sign up
                     </button>
+                    <button type="submit" onClick={handleLogin}>
+                        Login
+                    </button>
                 </form>
                 {message === "User registered successfully" && (
-                    <Link to="/home">Go to Home</Link>
+                    <Link to="/home"></Link>
+                )}
+                {message === "User logged in successfully" && (
+                    <Link to="/home"></Link>
                 )}
             </div>
         </>

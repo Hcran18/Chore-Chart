@@ -12,39 +12,44 @@ function Home() {
     const [newTodo, setNewTodo] = useState("");
     const [points, setPoints] = useState(0);
     const [todos, setTodos] = useState([]);
-    let cache = null;
-    let cachedUser = false;
 
     useEffect(() => {
-        cache = Cache.getInstance();
-        const storedUser = JSON.parse(localStorage.getItem("cache"));
-    
-        if (!cachedUser) {
-            if (storedUser) {
-                const newUser = new User(
-                    storedUser.user.id,
-                    storedUser.user.name,
-                    storedUser.user.points
-                );
-    
-                cache.setUser(newUser);
-                setNewUser(newUser);
-                cachedUser = true;
-            }
-    
-            const fetchTodos = async () => {
-                const service = new Todos();
-                const updatedTodos = await service.getTodos();
-                const givenTodos = updatedTodos.todos.map(
-                    (todo) => new Todo(todo[0], todo[1], todo[2], todo[3])
-                );
-    
-                setTodos(givenTodos);
-            };
-    
-            fetchTodos();
+        const cache = Cache.getInstance();
+        const storedCache = JSON.parse(localStorage.getItem("cache"));
+
+        if (storedCache && storedCache.user) {
+            const storedUser = storedCache.user;
+
+            const newUser = new User(
+                storedUser.id,
+                storedUser.name,
+                storedUser.points
+            );
+
+            cache.setUser(newUser);
+            setNewUser(newUser);
         }
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            const fetchTodos = async () => {
+                const service = new Todos();
+                try {
+                    const updatedTodos = await service.getTodos();
+                    const givenTodos = updatedTodos.todos.map(
+                        (todo) => new Todo(todo[0], todo[1], todo[2], todo[3])
+                    );
+
+                    setTodos(givenTodos);
+                } catch (error) {
+                    console.error("Error fetching todos:", error);
+                }
+            };
+
+            fetchTodos();
+        }
+    }, [user]);
 
     async function addTodo(e) {
         e.preventDefault();
@@ -78,7 +83,7 @@ function Home() {
 
     return (
         <div>
-            <h1>Welcome: {user.getName()}</h1>
+            <h1>Welcome {user.getName()}!</h1>
             <h2>Available Points: {user.getPoints()}</h2>
             <form>
                 <label>

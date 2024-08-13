@@ -18,6 +18,8 @@ export class User {
 
     // Get the user's name
     getName() {
+        // Capitalize the first letter of the user's name
+        this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1)
         return this.name
     }
 
