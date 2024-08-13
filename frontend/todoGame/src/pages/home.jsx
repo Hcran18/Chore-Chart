@@ -8,108 +8,110 @@ import { useEffect, useState } from "react";
 import "../App.css";
 
 function Home() {
-  const [user, setNewUser] = useState(null);
-  const [newTodo, setNewTodo] = useState("");
-  const [points, setPoints] = useState(0);
-  const [todos, setTodos] = useState([]);
-  let cache = null;
+    const [user, setNewUser] = useState(null);
+    const [newTodo, setNewTodo] = useState("");
+    const [points, setPoints] = useState(0);
+    const [todos, setTodos] = useState([]);
+    let cache = null;
+    let cachedUser = false;
 
-  useEffect(() => {
-    cache = Cache.getInstance();
-    const storedUser = JSON.parse(localStorage.getItem("cache"));
+    useEffect(() => {
+        cache = Cache.getInstance();
+        const storedUser = JSON.parse(localStorage.getItem("cache"));
+    
+        if (!cachedUser) {
+            if (storedUser) {
+                const newUser = new User(
+                    storedUser.user.id,
+                    storedUser.user.name,
+                    storedUser.user.points
+                );
+    
+                cache.setUser(newUser);
+                setNewUser(newUser);
+                cachedUser = true;
+            }
+    
+            const fetchTodos = async () => {
+                const service = new Todos();
+                const updatedTodos = await service.getTodos();
+                const givenTodos = updatedTodos.todos.map(
+                    (todo) => new Todo(todo[0], todo[1], todo[2], todo[3])
+                );
+    
+                setTodos(givenTodos);
+            };
+    
+            fetchTodos();
+        }
+    }, []);
 
-    if (storedUser) {
-      const newUser = new User(
-        storedUser.user.id,
-        storedUser.user.name,
-        storedUser.user.points
-      );
-
-      cache.setUser(newUser);
-      setNewUser(newUser);
-      console.log("Retrieved User:", user);
-    }
-  }, []);
-
-  async function addTodo(e) {
-    e.preventDefault();
-
-    const service = new Todos();
-    const id = Math.floor(Math.random() * 1000);
-    const userID = user.getID();
-    const intPoints = parseInt(points);
-    const newTodoObj = new Todo(id, userID, newTodo, intPoints);
-
-    try {
-      const response = await service.addTodo(newTodoObj);
-      console.log("Response:", response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-    async function getTodos(e) {
+    async function addTodo(e) {
         e.preventDefault();
 
         const service = new Todos();
+        const id = Math.floor(Math.random() * 1000);
+        const userID = user.getID();
+        const intPoints = parseInt(points);
+        const newTodoObj = new Todo(id, userID, newTodo, intPoints);
 
         try {
-            const response = await service.getTodos();
-            const givenTodos = response.todos.map(todo => new Todo(
-              todo[0], 
-              todo[1], 
-              todo[2], 
-              todo[3]
-            ));
+            const response = await service.addTodo(newTodoObj);
+
+            const updatedTodos = await service.getTodos();
+            const givenTodos = updatedTodos.todos.map(
+                (todo) => new Todo(todo[0], todo[1], todo[2], todo[3])
+            );
 
             setTodos(givenTodos);
-          } catch (error) {
+
+            setNewTodo("");
+            setPoints(0);
+        } catch (error) {
             console.error(error);
-          }
+        }
     }
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+    if (!user) {
+        return <div>Loading...</div>;
+    }
 
-  return (
-    <div>
-      <h1>Welcome: {user.getName()}</h1>
-      <h2>Available Points: {user.getPoints()}</h2>
-      <form>
-        <label>
-          Add Todo:
-          <input
-            type="text"
-            name="newTodo"
-            value={newTodo}
-            onChange={(e) => setNewTodo(e.target.value)}
-          />
-        </label>
-        <label>
-          Points:
-          <input
-            type="number"
-            name="points"
-            value={points}
-            onChange={(e) => setPoints(e.target.value)}
-          />
-        </label>
-        <button type="submit" onClick={addTodo}>
-          Submit
-        </button>
-      </form>
-      <button onClick={getTodos}>View Todos</button>
-        
-      <ul>
-        {todos.map(todo => (
-          <li key={todo.getID()}>
-            {todo.getTodo()} | Points: {todo.getPoints()}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <div>
+            <h1>Welcome: {user.getName()}</h1>
+            <h2>Available Points: {user.getPoints()}</h2>
+            <form>
+                <label>
+                    Add Todo:
+                    <input
+                        type="text"
+                        name="newTodo"
+                        value={newTodo}
+                        onChange={(e) => setNewTodo(e.target.value)}
+                    />
+                </label>
+                <label>
+                    Points:
+                    <input
+                        type="number"
+                        name="points"
+                        value={points}
+                        onChange={(e) => setPoints(e.target.value)}
+                    />
+                </label>
+                <button type="submit" onClick={addTodo}>
+                    Submit
+                </button>
+            </form>
+            <ul>
+                {todos.map((todo) => (
+                    <li key={todo.getID()}>
+                        {todo.getTodo()} | Points: {todo.getPoints()}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
 
 export default Home;
