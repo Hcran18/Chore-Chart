@@ -4,15 +4,13 @@ export class Cache {
     static instance = null
     static user = null
 
-    static getInstance() {
-        if (Cache.instance === null) {
-            Cache.instance = new Cache()
-        }
-        return Cache.instance
-    }
+    constructor() {}
 
-    constructor(user) {
-        this.user = user
+    static getInstance() {
+        if (this.instance === null) {
+            this.instance = new Cache()
+        }
+        return this.instance
     }
 
     // Set the user
@@ -25,3 +23,5 @@ export class Cache {
         return this.user
     }
 }
+
+export default Cache

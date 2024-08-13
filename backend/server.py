@@ -55,9 +55,9 @@ def delete_user(user_id: int):
 
 # Routes for todo
 @app.post("/create-todo/{todo_id}/{user_id}/{new_todo}/{given_points}")
-def create_todo(todo_id: int, user_id: int, given_todo: str, given_points: int):
+def create_todo(todo_id: int, user_id: int, new_todo: str, given_points: int):
     service = todoService()
-    new_todo = Todo(id=todo_id, user_id=user_id, todo=given_todo, points=given_points)
+    new_todo = Todo(id=todo_id, user_id=user_id, todo=new_todo, points=given_points)
     return service.create_todo(new_todo)
 
 @app.get("/get-todo/{todo_id}")

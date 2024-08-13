@@ -11,9 +11,19 @@ export class User {
         return this.id
     }
 
+    // Set the user's ID
+    setID(id) {
+        this.id = id
+    }
+
     // Get the user's name
     getName() {
         return this.name
+    }
+
+    // Set the user's name
+    setName(name) {
+        this.name = name
     }
 
     // Get the user's points
