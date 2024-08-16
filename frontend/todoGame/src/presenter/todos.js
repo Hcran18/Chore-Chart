@@ -41,4 +41,17 @@ export class Todos {
       throw error;
     }
   }
+
+  async completeTodo(todoID) {
+    const url = "http://localhost:8000/complete-todo/" + todoID;
+    const request = new Request();
+
+    try {
+      const data = await request.delete(url, "Failed to complete todo");
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }

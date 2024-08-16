@@ -77,6 +77,28 @@ function Home() {
         }
     }
 
+    async function completeTodo(e) {
+        e.preventDefault();
+
+        const service = new Todos();
+        const id = e.target.id;
+
+        try {
+            const {message, user} = await service.completeTodo(id);
+            const updatedTodos = await service.getTodos();
+            const givenTodos = updatedTodos.todos.map(
+                (todo) => new Todo(todo[0], todo[1], todo[2], todo[3])
+            );
+            setTodos(givenTodos);
+
+            const updatedUser = new User(user.id, user.name, user.points);
+
+            setNewUser(updatedUser);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     if (!user) {
         return <div>Loading...</div>;
     }
@@ -112,6 +134,9 @@ function Home() {
                 {todos.map((todo) => (
                     <li key={todo.getID()}>
                         {todo.getTodo()} | Points: {todo.getPoints()}
+                        <button id={todo.getID()} onClick={completeTodo}>
+                            Complete
+                        </button>
                     </li>
                 ))}
             </ul>
