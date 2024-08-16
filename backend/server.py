@@ -21,10 +21,6 @@ app.add_middleware(
 
 # To run the server, use the command: uvicorn server:app --reload
 
-# @app.get("/")
-# def read_root():
-# return {"message": "Hello World"}Invoke-WebRequest
-
 # Routes for user
 @app.post("/register/{user_id}/{user_name}")
 def register(user_id: int, user_name: str):
@@ -108,3 +104,31 @@ def update_item(item_id: int, user_id: int, new_item: str, given_cost: int):
 def delete_item(item_id: int):
     service = itemService()
     return service.delete_item(item_id)
+
+# Other logic
+
+# Delete a todo and update the user's points
+@app.delete("/complete-todo/{todo_id}")
+def complete_todo(todo_id: int):
+    todoServ = todoService()
+    userServ = userService()
+
+    todo = todoServ.get_todo(todo_id)
+    assert todo is not None
+
+    userID = todo['todo'][1]
+    user = userServ.get_user(userID)
+    assert user is not None
+
+    todoPoints = todo['todo'][3]
+    userPoints = user['user'][2]
+    userPoints += todoPoints
+    newUser = User(id=user['user'][0], name=user['user'][1], points=userPoints)
+
+    updatedUser = userServ.update_user(newUser)
+    assert updatedUser['user'].points == userPoints
+
+    deletedTodo = todoServ.delete_todo(todo_id)
+    assert deletedTodo['message'] == "Todo deleted successfully"
+
+    return {"message": updatedUser['message'], "user": updatedUser['user']}
