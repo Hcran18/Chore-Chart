@@ -9,6 +9,7 @@ import "../App.css";
 
 function Login() {
     const [username, setUsername] = useState("");
+    const [password, setPassoword] = useState("");
     const [message, setMessage] = useState("");
 
     async function handleSignUp(e) {
@@ -62,25 +63,40 @@ function Login() {
 
     return (
         <>
-            <div>
+            <div className="wrapper">
                 <h1>Todo Game</h1>
                 <h3>Sign up or Login</h3>
                 <form>
-                    <label>
-                        Username:
-                        <input
-                            type="text"
-                            name="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                    </label>
-                    <button type="submit" onClick={handleSignUp}>
-                        Sign up
-                    </button>
-                    <button type="submit" onClick={handleLogin}>
-                        Login
-                    </button>
+                    <div className="inputs">
+                        <label>
+                            Username:
+                            <input
+                                type="text"
+                                name="username"
+                                className="inputBox"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </label>
+                        <lable>
+                            Password:
+                            <input
+                                type="text"
+                                name="password"
+                                className="inputBox"
+                                value={password}
+                                onChange={(e) => setPassoword(e.target.value)}
+                            />
+                        </lable>
+                    </div>
+                    <div className="buttons">
+                        <button type="submit" onClick={handleSignUp}>
+                            Sign up
+                        </button>
+                        <button type="submit" onClick={handleLogin}>
+                            Login
+                        </button>
+                    </div>
                 </form>
                 {message === "User registered successfully" && (
                     <Link to="/home"></Link>

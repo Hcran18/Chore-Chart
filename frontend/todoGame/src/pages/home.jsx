@@ -3,6 +3,8 @@ import { User } from "../model/user.js";
 import { Todos } from "../presenter/todos.js";
 import { Todo } from "../model/todo.js";
 
+import { Link } from "react-router-dom";
+
 import { useEffect, useState } from "react";
 
 import "../App.css";
@@ -94,6 +96,11 @@ function Home() {
             const updatedUser = new User(user.id, user.name, user.points);
 
             setNewUser(updatedUser);
+
+            const cache = Cache.getInstance();
+            cache.setUser(updatedUser);
+
+            localStorage.setItem("cache", JSON.stringify(cache));
         } catch (error) {
             console.error(error);
         }
@@ -107,32 +114,40 @@ function Home() {
         <div>
             <h1>Welcome {user.getName()}!</h1>
             <h2>Available Points: {user.getPoints()}</h2>
+            <div className="page-links">
+                <Link className="link" to="/" onClick={() => localStorage.clear()}>Logout</Link>
+                <Link className="link" to="/store">Go to Store</Link>
+            </div>
             <form>
-                <label>
-                    Add Todo:
-                    <input
-                        type="text"
-                        name="newTodo"
-                        value={newTodo}
-                        onChange={(e) => setNewTodo(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Points:
-                    <input
-                        type="number"
-                        name="points"
-                        value={points}
-                        onChange={(e) => setPoints(e.target.value)}
-                    />
-                </label>
+                <div className="inputs">
+                    <label>
+                        Todo:
+                        <input
+                            type="text"
+                            name="newTodo"
+                            className="inputBox"
+                            value={newTodo}
+                            onChange={(e) => setNewTodo(e.target.value)}
+                        />
+                    </label>
+                    <label>
+                        Points:
+                        <input
+                            type="number"
+                            name="points"
+                            className="inputBox"
+                            value={points}
+                            onChange={(e) => setPoints(e.target.value)}
+                        />
+                    </label>
+                </div>
                 <button type="submit" onClick={addTodo}>
                     Submit
                 </button>
             </form>
             <ul>
                 {todos.map((todo) => (
-                    <li key={todo.getID()}>
+                    <li className="todo" key={todo.getID()}>
                         {todo.getTodo()} | Points: {todo.getPoints()}
                         <button id={todo.getID()} onClick={completeTodo}>
                             Complete
