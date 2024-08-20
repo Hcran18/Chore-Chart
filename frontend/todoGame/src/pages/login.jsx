@@ -78,7 +78,7 @@ function Login() {
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                         </label>
-                        <lable>
+                        <label>
                             Password:
                             <input
                                 type="text"
@@ -87,7 +87,7 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassoword(e.target.value)}
                             />
-                        </lable>
+                        </label>
                     </div>
                     <div className="buttons">
                         <button type="submit" onClick={handleSignUp}>
