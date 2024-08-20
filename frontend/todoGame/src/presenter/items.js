@@ -43,7 +43,7 @@ export class Items {
     }
 
     async purchaseItem(itemID) {
-        const url = "http://localhost:8000/delete-item/" + itemID;
+        const url = "http://localhost:8000/purchase-item/" + this.user.getID() + "/" + itemID;
         const request = new Request();
 
         try {

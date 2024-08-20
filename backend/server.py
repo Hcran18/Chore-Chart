@@ -132,3 +132,32 @@ def complete_todo(todo_id: int):
     assert deletedTodo['message'] == "Todo deleted successfully"
 
     return {"message": updatedUser['message'], "user": updatedUser['user']}
+
+@app.delete("/purchase-item/{user_id}/{item_id}")
+def purchase_item(user_id: int, item_id: int):
+    itemServ = itemService()
+    userServ = userService()
+
+    item = itemServ.get_item(item_id)
+    assert item is not None
+
+    itemCost = item['item'][3]
+
+    user = userServ.get_user(user_id)
+    assert user is not None
+
+    userPoints = user['user'][2]
+
+    if userPoints < itemCost:
+        return {"message": "Insufficient points to purchase this item", "user": user['user']}
+    
+    userPoints -= itemCost
+    newUser = User(id=user['user'][0], name=user['user'][1], points=userPoints)
+
+    updatedUser = userServ.update_user(newUser)
+    assert updatedUser['user'].points == userPoints
+
+    deletedItem = itemServ.delete_item(item_id)
+    assert deletedItem['message'] == "Item deleted successfully"
+
+    return {"message": updatedUser['message'], "user": updatedUser['user']}

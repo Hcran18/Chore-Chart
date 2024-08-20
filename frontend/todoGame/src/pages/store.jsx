@@ -83,7 +83,11 @@ function Store() {
         const itemID = e.target.id;
 
         try {
-            const {message, item} = await service.purchaseItem(itemID);
+            const {message, user} = await service.purchaseItem(itemID);
+                if (message === "Insufficient points to purchase this item") {
+                    alert("Insufficient points to purchase this item");
+                    return;
+                }
             const updatedItems = await service.getItems();
             const givenItems = updatedItems.items.map(
                 (item) => new Item(item[0], item[1], item[2], item[3])
@@ -109,7 +113,7 @@ function Store() {
 
     return (
         <div>
-            <h1>Welcome {user.getName()}!</h1>
+            <h1>Purchase an Item!</h1>
             <h2>Available Points: {user.getPoints()}</h2>
             <div className="page-links">
                 <Link className="link" to="/" onClick={() => localStorage.clear()}>Logout</Link>
