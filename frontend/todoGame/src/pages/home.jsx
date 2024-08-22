@@ -2,6 +2,7 @@ import { Cache } from "../cache/cache.js";
 import { User } from "../model/user.js";
 import { Todos } from "../service/todos.js";
 import { Todo } from "../model/todo.js";
+import { TodoPresenter } from "../presenter/todoPresenter.js";
 
 import { Link } from "react-router-dom";
 
@@ -36,17 +37,10 @@ function Home() {
     useEffect(() => {
         if (user) {
             const fetchTodos = async () => {
-                const service = new Todos();
-                try {
-                    const updatedTodos = await service.getTodos();
-                    const givenTodos = updatedTodos.todos.map(
-                        (todo) => new Todo(todo[0], todo[1], todo[2], todo[3])
-                    );
+                const presenter = new TodoPresenter();
+                const givenTodos = await presenter.getTodos();
 
-                    setTodos(givenTodos);
-                } catch (error) {
-                    console.error("Error fetching todos:", error);
-                }
+                setTodos(givenTodos);
             };
 
             fetchTodos();
@@ -56,54 +50,32 @@ function Home() {
     async function addTodo(e) {
         e.preventDefault();
 
-        const service = new Todos();
+        const presenter = new TodoPresenter();
         const id = Math.floor(Math.random() * 1000);
         const userID = user.getID();
         const intPoints = parseInt(points);
         const newTodoObj = new Todo(id, userID, newTodo, intPoints);
 
-        try {
-            const response = await service.addTodo(newTodoObj);
+        const givenTodos = await presenter.addTodo(newTodoObj);
 
-            const updatedTodos = await service.getTodos();
-            const givenTodos = updatedTodos.todos.map(
-                (todo) => new Todo(todo[0], todo[1], todo[2], todo[3])
-            );
-
-            setTodos(givenTodos);
-
-            setNewTodo("");
-            setPoints(0);
-        } catch (error) {
-            console.error(error);
-        }
+        setTodos(givenTodos);
+        setNewTodo("");
+        setPoints(0);
     }
 
     async function completeTodo(e) {
         e.preventDefault();
 
-        const service = new Todos();
+        const presenter = new TodoPresenter();
+        const cache = Cache.getInstance();
         const id = e.target.id;
 
-        try {
-            const {message, user} = await service.completeTodo(id);
-            const updatedTodos = await service.getTodos();
-            const givenTodos = updatedTodos.todos.map(
-                (todo) => new Todo(todo[0], todo[1], todo[2], todo[3])
-            );
-            setTodos(givenTodos);
+        const {givenTodos, updatedUser} = await presenter.completeTodo(id);
 
-            const updatedUser = new User(user.id, user.name, user.points);
-
-            setNewUser(updatedUser);
-
-            const cache = Cache.getInstance();
-            cache.setUser(updatedUser);
-
-            localStorage.setItem("cache", JSON.stringify(cache));
-        } catch (error) {
-            console.error(error);
-        }
+        setTodos(givenTodos);
+        setNewUser(updatedUser);
+        cache.setUser(updatedUser);
+        localStorage.setItem("cache", JSON.stringify(cache));
     }
 
     if (!user) {
