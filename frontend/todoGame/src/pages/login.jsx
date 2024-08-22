@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { Cache } from "../cache/cache.js";
 import { User } from "../model/user.js";
-import { Register } from "../presenter/register.js";
+import { RegisterPresenter } from "../presenter/registerPresenter.js";
 
 import "../App.css";
 
@@ -15,49 +15,34 @@ function Login() {
     async function handleSignUp(e) {
         e.preventDefault();
 
+        const presenter = new RegisterPresenter();
         const cache = Cache.getInstance();
         const id = Math.floor(Math.random() * 1000);
         const newUser = new User(id, username, 0);
-
         cache.setUser(newUser);
 
-        const service = new Register();
+        const {message, givenUser} = await presenter.register();
+        setMessage(message);
+        cache.setUser(givenUser);
 
-        try {
-            const { message, user } = await service.signUp();
-            const givenUser = new User(user.id, user.name, user.points);
-            cache.setUser(givenUser);
-
-            setMessage(message);
-
-            if (message === "User registered successfully") {
-                localStorage.setItem("cache", JSON.stringify(cache));
-                window.location.href = "/home";
-            }
-        } catch (error) {
-            console.error(error);
+        if (message === "User registered successfully") {
+            localStorage.setItem("cache", JSON.stringify(cache));
+            window.location.href = "/home";
         }
     }
 
     async function handleLogin(e) {
         e.preventDefault();
-
+        
         const cache = Cache.getInstance();
-        const service = new Register();
+        const presenter = new RegisterPresenter();
+        const {message, givenUser} = await presenter.login(username);
+        cache.setUser(givenUser);
+        setMessage(message);
 
-        try {
-            const { message, user } = await service.login(username);
-            const givenUser = new User(user[0], user[1], user[2]);
-            cache.setUser(givenUser);
-
-            setMessage(message);
-
-            if (message === "User logged in successfully") {
-                localStorage.setItem("cache", JSON.stringify(cache));
-                window.location.href = "/home";
-            }
-        } catch (error) {
-            console.error(error);
+        if (message === "User logged in successfully") {
+            localStorage.setItem("cache", JSON.stringify(cache));
+            window.location.href = "/home";
         }
     }
 

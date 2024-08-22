@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Cache } from "../cache/cache.js";
 import { User } from "../model/user.js";
 import { Item } from "../model/item.js";
-import { Items } from "../presenter/items.js";
+import { Items } from "../service/items.js";
 
 
 function Store() {
