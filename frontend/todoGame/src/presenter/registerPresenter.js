@@ -1,11 +1,11 @@
 import { User } from "../model/user.js";
-import { Register } from "../service/register.js";
+import { RegisterService } from "../service/registerService.js";
 
 export class RegisterPresenter {
     service = null;
 
     constructor() {
-        this.service = new Register();
+        this.service = new RegisterService();
     }
 
     async register() {

@@ -1,7 +1,7 @@
 import { Cache } from "../cache/cache";
 import { Request } from "../model/request";
 
-export class Items {
+export class ItemService {
     cache = null;
     user = null;
 

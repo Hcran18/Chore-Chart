@@ -1,4 +1,4 @@
-import { Todos } from "../service/todos";
+import { TodoService } from "../service/todoService";
 import { Todo } from "../model/todo";
 import { User } from "../model/user";
 
@@ -6,7 +6,7 @@ export class TodoPresenter {
     service = null;
 
     constructor() {
-        this.service = new Todos();
+        this.service = new TodoService();
     }
 
     async getTodos() {

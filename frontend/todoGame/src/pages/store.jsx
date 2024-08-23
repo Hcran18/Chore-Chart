@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { Cache } from "../cache/cache.js";
 import { User } from "../model/user.js";
 import { Item } from "../model/item.js";
-import { Items } from "../service/items.js";
+
+import { itemPresenter } from "../presenter/itemPresenter.js";
 
 
 function Store() {
@@ -34,17 +35,10 @@ function Store() {
     useEffect(() => {
         if (user) {
             const fetchItems = async () => {
-                const service = new Items();
-                try {
-                    const updatedItems = await service.getItems();
-                    const givenItems = updatedItems.items.map(
-                        (item) => new Item(item[0], item[1], item[2], item[3])
-                    );
+                const presenter = new itemPresenter();
+                const givenItems = await presenter.getItems();
 
-                    setItems(givenItems);
-                } catch (error) {
-                    console.error("Error fetching items:", error);
-                }
+                setItems(givenItems);
             };
 
             fetchItems();
@@ -54,56 +48,33 @@ function Store() {
     async function addItem(e) {
         e.preventDefault();
 
-        const service = new Items();
+        const presenter = new itemPresenter();
         const id = Math.floor(Math.random() * 1000);
         const userID = user.getID();
         const intCost = parseInt(cost);
         const newItemObj = new Item(id, userID, newItem, intCost);
 
-        try {
-            const response = await service.addItem(newItemObj);
-            const updatedItems = await service.getItems();
-            const givenItems = updatedItems.items.map(
-                (item) => new Item(item[0], item[1], item[2], item[3])
-            );
+        const givenItems = await presenter.addItem(newItemObj)
 
-            setItems(givenItems);
-
-            setNewItem("");
-            setCost(0);
-        } catch (error) {
-            console.error(error);
-        }
+        setItems(givenItems);
+        setNewItem("");
+        setCost(0);
     }
 
     const purchaseItem = async (e) => {
         e.preventDefault();
 
-        const service = new Items();
+        const presenter = new itemPresenter();
         const itemID = e.target.id;
 
-        try {
-            const {message, user} = await service.purchaseItem(itemID);
-                if (message === "Insufficient points to purchase this item") {
-                    alert("Insufficient points to purchase this item");
-                    return;
-                }
-            const updatedItems = await service.getItems();
-            const givenItems = updatedItems.items.map(
-                (item) => new Item(item[0], item[1], item[2], item[3])
-            );
+        const {givenItems, updatedUser} = await presenter.purchaseItem(itemID);
+        
+        if(givenItems != null) {
             setItems(givenItems);
-
-            const updatedUser = new User(user.id, user.name, user.points);
-
             setNewUser(updatedUser);
-
             const cache = Cache.getInstance();
             cache.setUser(updatedUser);
-
             localStorage.setItem("cache", JSON.stringify(cache));
-        } catch (error) {
-            console.error(error);
         }
     };
     

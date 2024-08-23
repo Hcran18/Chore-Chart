@@ -1,7 +1,7 @@
 import { Cache } from "../cache/cache";
 import { Request } from "../model/request";
 
-export class Todos {
+export class TodoService {
   cache = null;
   user = null;
 
