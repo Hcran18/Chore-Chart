@@ -8,6 +8,10 @@ export class RegisterPresenter {
         this.service = new RegisterService();
     }
 
+    /**
+     * Calls the signUp function in the Register Service
+     * @returns {Promise<{message: string, givenUser: User}>} The message and the registered user
+     */
     async register() {
         try {
             const { message, user } = await this.service.signUp();
@@ -19,6 +23,11 @@ export class RegisterPresenter {
         }
     }
 
+    /**
+     * Logs in the user with the given username
+     * @param {User} username 
+     * @returns {Promise<{message: string, givenUser: User}>} The message and the registered user
+     */
     async login(username) {
         try {
             const { message, user } = await this.service.login(username);

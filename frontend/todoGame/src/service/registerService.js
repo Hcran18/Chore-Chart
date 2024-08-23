@@ -10,6 +10,10 @@ export class RegisterService {
     this.user = this.cache.getUser();
   }
 
+  /**
+   * registers the user with the information stored in the cache
+   * @returns {Promise<Object>} A dictionary holding the user info
+   */
   async signUp() {
     const url =
       "http://localhost:8000/register/" +
@@ -27,6 +31,11 @@ export class RegisterService {
     }
   }
 
+  /**
+   * logs in the user using the given username
+   * @param {String} username 
+   * @returns {Promise<Array>} List of user info [id, name, points]
+   */
   async login(username) {
     const url = "http://localhost:8000/login/" + username;
     const request = new Request();

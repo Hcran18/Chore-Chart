@@ -12,6 +12,10 @@ function Login() {
     const [password, setPassoword] = useState("");
     const [message, setMessage] = useState("");
 
+    /**
+     * handles a user registering
+     * @param {*} e 
+     */
     async function handleSignUp(e) {
         e.preventDefault();
 
@@ -31,6 +35,10 @@ function Login() {
         }
     }
 
+    /**
+     * handles a user logging in
+     * @param {*} e 
+     */
     async function handleLogin(e) {
         e.preventDefault();
         
