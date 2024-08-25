@@ -93,3 +93,6 @@ Back end has been built using Python and FastAPI it connects to a MySQL database
 
 ## Contributing
 Feel free to make a pull request to fix any bugs or add new features.
+
+## License
+GNU AFFERO GENERAL PUBLIC LICENSE
