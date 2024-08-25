@@ -45,6 +45,10 @@ function Store() {
         }
     }, [user]);
 
+    /**
+     * Adds an item to the user's list
+     * @param {*} e 
+     */
     async function addItem(e) {
         e.preventDefault();
 
@@ -61,6 +65,10 @@ function Store() {
         setCost(0);
     }
 
+    /**
+     * Purchases an item
+     * @param {*} e 
+     */
     const purchaseItem = async (e) => {
         e.preventDefault();
 

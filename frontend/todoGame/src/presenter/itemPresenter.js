@@ -9,6 +9,10 @@ export class itemPresenter {
         this.service = new ItemService();
     }
 
+    /**
+     * Get all items
+     * @returns {Promise<Item[]>}
+     */
     async getItems() {
         try {
             const updatedItems = await this.service.getItems();
@@ -22,6 +26,11 @@ export class itemPresenter {
         }
     }
 
+    /**
+     * Add an item to the user's list
+     * @param {Item} newItemObj 
+     * @returns {Promise<Item[]>}
+     */
     async addItem(newItemObj) {
         try {
             const response = await this.service.addItem(newItemObj);
@@ -36,6 +45,11 @@ export class itemPresenter {
         }
     }
 
+    /**
+     * Purchase an item
+     * @param {number} itemID 
+     * @returns {Promise<{givenItems: Item[], updatedUser: User}>}
+     */
     async purchaseItem(itemID) {
         try {
             const {message, user} = await this.service.purchaseItem(itemID);

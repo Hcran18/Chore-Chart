@@ -10,6 +10,10 @@ export class ItemService {
         this.user = this.cache.getUser();
     }
 
+    /**
+     * Get all items
+     * @returns {Promise<{items: []}>}
+     */
     async getItems() {
         const url = "http://localhost:8000/get-items/" + this.user.getID();
         const request = new Request();
@@ -22,6 +26,11 @@ export class ItemService {
         }
     }
 
+    /**
+     * Add an item to the user's list
+     * @param {Item} item 
+     * @returns {Promise<{items: []}>}
+     */
     async addItem(item) {
         const url =
             "http://localhost:8000/create-item/" +
@@ -42,6 +51,11 @@ export class ItemService {
         }
     }
 
+    /**
+     * Purchase an item
+     * @param {number} itemID 
+     * @returns {Promise<{items: [], user: User}>}
+     */
     async purchaseItem(itemID) {
         const url = "http://localhost:8000/purchase-item/" + this.user.getID() + "/" + itemID;
         const request = new Request();
