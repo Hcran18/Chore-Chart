@@ -46,6 +46,11 @@ function Home() {
         }
     }, [user]);
 
+    /**
+     * Adds a todo to the user's list
+     * @param {*} 
+     * @returns {Promise<void>}
+     */
     async function addTodo(e) {
         e.preventDefault();
 
@@ -62,6 +67,11 @@ function Home() {
         setPoints(0);
     }
 
+    /**
+     * Completes a todo
+     * @param {*} e
+     * @returns {Promise<void>}
+     */
     async function completeTodo(e) {
         e.preventDefault();
 

@@ -9,6 +9,10 @@ export class TodoPresenter {
         this.service = new TodoService();
     }
 
+    /**
+     * Get all todos
+     * @returns {Promise<Todo[]>}
+     */
     async getTodos() {
         try {
             const updatedTodos = await this.service.getTodos();
@@ -22,6 +26,11 @@ export class TodoPresenter {
         }
     }
 
+    /**
+     * Add a todo to the user's list
+     * @param {Todo} newTodoObj 
+     * @returns {Promise<Todo[]>}
+     */
     async addTodo(newTodoObj) {
         try {
             const response = await this.service.addTodo(newTodoObj);
@@ -37,6 +46,11 @@ export class TodoPresenter {
         }
     }
 
+    /**
+     * Complete a todo
+     * @param {number} id
+     * @returns {Promise<{givenTodos: Todo[], updatedUser: User}>}
+     */
     async completeTodo(id) {
         try {
             const {message, user} = await this.service.completeTodo(id);

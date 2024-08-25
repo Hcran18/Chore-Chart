@@ -10,6 +10,10 @@ export class TodoService {
     this.user = this.cache.getUser();
   }
 
+  /**
+   * Get all todos
+   * @returns {Promise<{todos: []}>}
+   */
   async getTodos() {
     const url = "http://localhost:8000/get-todos/" + this.user.getID();
     const request = new Request();
@@ -22,6 +26,11 @@ export class TodoService {
     }
   }
 
+  /**
+   * Add a todo to the user's list
+   * @param {Todo} todo 
+   * @returns {Promise<{todos: []}>}
+   */
   async addTodo(todo) {
     const url =
       "http://localhost:8000/create-todo/" +
@@ -42,6 +51,11 @@ export class TodoService {
     }
   }
 
+  /**
+   * Complete a todo
+   * @param {number} todoID 
+   * @returns {Promise<{message: string, user: {id: number, name: string, points: number}}>}
+   */
   async completeTodo(todoID) {
     const url = "http://localhost:8000/complete-todo/" + todoID;
     const request = new Request();
