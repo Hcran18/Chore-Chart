@@ -1,7 +1,7 @@
-# TODO GAME
+# Chore Chart
 
 ## Description
-TODO GAME will eventually be a way for parents to incentivize their children by setting todos worth points upon completion. Children will then be able to redeem their points for rewards that their parents have set.
+Chore Chart will eventually be a way for parents to incentivize their children by setting todos worth points upon completion. Children will then be able to redeem their points for rewards that their parents have set.
 
 ## Table of Contents
 - [Installation](#installation)
