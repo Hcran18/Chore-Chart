@@ -48,9 +48,6 @@ Chore Chart will eventually be a way for parents to incentivize their children b
     ```
 5. Run the back-end database:
     ```sh
-    docker build
-    ```
-    ```sh
     docker run --name my-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -e MYSQL_DATABASE=mydb --network todo-game-network -d mysql:latest
     ```
 
